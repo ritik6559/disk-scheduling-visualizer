@@ -1,7 +1,6 @@
 export const clook = (requests, head) => {
     const sortedRequests = [...requests].sort((a, b) => a - b);
 
-    // Find the first request greater than head
     let splitIndex = sortedRequests.findIndex(req => req >= head);
     if (splitIndex === -1) splitIndex = sortedRequests.length;
 
@@ -9,21 +8,18 @@ export const clook = (requests, head) => {
     let totalSeekTime = 0;
     let current = head;
 
-    // Service requests to the right of head
     for (let i = splitIndex; i < sortedRequests.length; i++) {
         sequence.push(sortedRequests[i]);
         totalSeekTime += Math.abs(sortedRequests[i] - current);
         current = sortedRequests[i];
     }
 
-    // Jump to the leftmost request
     if (splitIndex > 0) {
         sequence.push(sortedRequests[0]);
         totalSeekTime += Math.abs(sortedRequests[0] - current);
         current = sortedRequests[0];
     }
 
-    // Service the remaining requests
     for (let i = 1; i < splitIndex; i++) {
         sequence.push(sortedRequests[i]);
         totalSeekTime += Math.abs(sortedRequests[i] - current);
